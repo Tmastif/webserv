@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListeningSocket.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilazar <ilazar@student.42.de>              +#+  +:+       +#+        */
+/*   By: ilazar <ilazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:47 by ilazar            #+#    #+#             */
-/*   Updated: 2025/09/17 18:38:49 by ilazar           ###   ########.fr       */
+/*   Updated: 2025/09/19 17:32:13 by ilazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,23 @@
 #include <unistd.h>
 
 
+/*
+A class to create a socket, bind it and have it listening
+a TCP socket Ipv4
+
+Class dosn't allow copy and assigment 
+*/
+
 class ListeningSocket {
 private:
     int _fd;
+    ListeningSocket(const ListeningSocket &oth);
+    ListeningSocket& operator=(const ListeningSocket &oth);
 
 public:
+    ListeningSocket();
     ListeningSocket(u_long ip_addr, int port, int backlog);
     ~ListeningSocket();
 
     int getFd() const;
-
-
 };
-
-
-
-
-    /*
-    class Socket {
-    private:
-        struct sockaddr_in address;
-        int sock;
-        void    bind_socket();
-        void    connect_socket();
-
-    public:
-        Socket(int domain, int type, int protocol, int port, unsigned long ip_addrs);
-        
-    
-        void    listening(int backlog, int to_bind);
-    };*/

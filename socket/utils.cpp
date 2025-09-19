@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ilazar <ilazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/17 16:32:25 by ilazar            #+#    #+#             */
-/*   Updated: 2025/09/19 17:33:27 by ilazar           ###   ########.fr       */
+/*   Created: 2025/09/19 17:18:57 by ilazar            #+#    #+#             */
+/*   Updated: 2025/09/19 17:26:28 by ilazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ListeningSocket.hpp"
-#include <iostream>
+#pragma once
 
-#define PORT 8080
+#include <fcntl.h>
 
-int main(void) {
-
-    ListeningSocket sock;
-    
-    try {
-        ListeningSocket sock(INADDR_ANY, PORT, 10);
-        std::cout << sock.getFd();
-    } catch (const std::exception &e) {
-        std::cerr << "Socket error: " << e.what() << std::endl;
-        return 1;
-    }
-    
-    
-    
-    
-    
-    return 0;
-};
+// set a socket to non-blocking mode return -1 if failed.
+int setNonBlocking(int fd) {
+    int flags = fcntl(fd, F_GETFL, 0);
+    if (flags == -1)
+        return -1;
+    return (fcntl(fd, F_SETFL, flags | O_NONBLOCK));
+}

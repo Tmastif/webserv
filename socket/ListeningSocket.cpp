@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListeningSocket.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilazar <ilazar@student.42.de>              +#+  +:+       +#+        */
+/*   By: ilazar <ilazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:25 by ilazar            #+#    #+#             */
-/*   Updated: 2025/09/17 18:50:54 by ilazar           ###   ########.fr       */
+/*   Updated: 2025/09/19 17:31:53 by ilazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 #include <iostream>
 
 //Default Constructor
+ListeningSocket::ListeningSocket(void) : _fd(-1) {};
+
 ListeningSocket::ListeningSocket(u_long ip_addr, int port, int backlog) {
     _fd = socket(AF_INET, SOCK_STREAM, 0);
     if (_fd < 0)
         throw std::runtime_error(std::string("socket() failed: ") + strerror(errno));
 
     int opt = 1;
-    setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-
+    if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
+        throw std::runtime_error(std::string("setsocket() failed: ") + strerror(errno));
+        
     sockaddr_in addr;
     std::memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
@@ -36,12 +39,16 @@ ListeningSocket::ListeningSocket(u_long ip_addr, int port, int backlog) {
         throw std::runtime_error(std::string("listen failed: ") + strerror(errno));
 }
 
+//copy and assigment destructors purposfully undefine and are private 
+// ListeningSocket::ListeningSocket(const ListeningSocket &oth) {}
+
+// ListeningSocket& ListeningSocket::operator=(const ListeningSocket &oth) {}
+
 //Deconstructor
 ListeningSocket::~ListeningSocket() {
     if (_fd >= 0)
         close(_fd);
 }
-
 
 //Getters
 int ListeningSocket::getFd() const {
