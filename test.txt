@@ -1,0 +1,24 @@
+
+
+POSSIBLE TESTS TO RUN
+
+make & run the ./webserv
+
+
+on a different terminal connect a client:
+
+nc 127.0.0.1 8080
+
+
+//write from client side - the server will display it
+//ctrl + d to exit the client
+
+
+
+another option:
+
+seq 1 10000 | nc 127.0.0.1 8080
+
+//will send a msg larger than the MAX_BUFF_READ
+//will be recieved in chunks
+

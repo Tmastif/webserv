@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilazar <ilazar@student.42.de>              +#+  +:+       +#+        */
+/*   By: ilazar <ilazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 21:26:20 by ilazar            #+#    #+#             */
-/*   Updated: 2025/09/23 22:18:15 by ilazar           ###   ########.fr       */
+/*   Updated: 2025/09/24 16:10:18 by ilazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <string>
 
 #define MAX_EVENTS 64 //maximum number of events that epoll can return in one call
+#define READ_BUFF_SIZE 4096 //4kb - a convetion to handle most small requests in one read.
 
 class ServerManager {
   
@@ -41,7 +42,7 @@ class ServerManager {
         bool    isListenFd(int fd);             //check if fd is a listening socket
         int     getServerIndex(int listenFd);   
         void    newConnection(int listenFd);    //accepts clients, add to epoll
-        void    clientRead(int clientFd);       //read data until EAGAIN
+        bool    clientRead(int clientFd);       //read data until EAGAIN
         // void    clientWrite(int clientFd);
         void    closeClient(int clientFd);      //remove fd from epoll
 };

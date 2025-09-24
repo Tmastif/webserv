@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilazar <ilazar@student.42.de>              +#+  +:+       +#+        */
+/*   By: ilazar <ilazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:59:04 by ilazar            #+#    #+#             */
-/*   Updated: 2025/09/23 21:47:17 by ilazar           ###   ########.fr       */
+/*   Updated: 2025/09/24 16:20:16 by ilazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <cstring>
 #include <netdb.h>
 #include <iostream>
+#include <sstream>
 
 
 // Constructor Destructor
@@ -38,7 +39,9 @@ void    Server::init(void) {
     hints.ai_socktype = SOCK_STREAM; //TCP
     hints.ai_flags = AI_PASSIVE;     //binds "0.0.0.0" if node == null
     
-    std::string portStr = std::to_string(_port);
+    std::stringstream ss;
+    ss << _port;
+    std::string portStr = ss.str();
 
     int ret = getaddrinfo(_host.c_str(), portStr.c_str(), &hints, &res);
     if (ret != 0) {
@@ -76,9 +79,9 @@ int     Server::acceptConnection(void) {
     while (1) {
         clientFd = accept(_socketFd, (struct sockaddr*)&clientAddr, &addrLen);
         if (clientFd >= 0) {
-            std::cout << "Accepted connection from: "
-                    << ntohs(clientAddr.sin_port)
-                    << " (fd=" << clientFd << ")" << std::endl;
+            std::cout << "[fd " << clientFd 
+                    << "] Accepted connection on port: "
+                    << ntohs(clientAddr.sin_port) << std::endl;
             return clientFd;
         } else {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
